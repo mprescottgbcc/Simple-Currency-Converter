@@ -1,4 +1,10 @@
 input = require('sync-input');
+let welcome;
+let choice;
+let from;
+let to;
+let amount;
+let result;
 
 const currencies = new Map([
     ['USD', 1],
@@ -11,36 +17,52 @@ const currencies = new Map([
 const convertToUSD = (amount, from) => amount / currencies.get(from);
 const convertFromUSD = (amount, to) => amount * currencies.get(to);
 
-let welcome = "Welcome to Currency Converter!";
+welcome = "Welcome to Currency Converter!";
 currencies.forEach(function(value, key) {
     welcome += `\n1 USD equals ${currencies.get(key)} ${key}`;
 });
 
 console.log(welcome);
-console.log("What do you want to convert?");
 
-let from = input("From: ").toUpperCase();
-if (currencies.get(from) === undefined) {
-    console.log("Unknown currency");
-    return;
-}
+do {
+    console.log("What do you want to do?");
+    choice = Number(input("1-Convert currencies 2-Exit program\n"));
 
-let to = input("To: ").toUpperCase();
-if (currencies.get(to) === undefined) {
-    console.log("Unknown currency");
-    return;
-}
+    if (choice === 2) {
+        break;
+    }
 
-let amount = Number(input("Amount: "));
-if (isNaN(amount)) {
-    console.log("The amount has to be a number");
-    return;
-}
+    if (choice !== 1) {
+        console.log("Unknown input");
+        continue;
+    }
 
-if (amount < 1) {
-    console.log("The amount cannot be less than 1");
-    return;
-}
+    console.log("What do you want to convert?");
+    from = input("From: ").toUpperCase();
+    if (currencies.get(from) === undefined) {
+        console.log("Unknown currency");
+        continue;
+    }
 
-let result = convertFromUSD(convertToUSD(amount, from), to).toFixed(4);
-console.log(`Result: ${amount} ${from} equals ${result} ${to}`);
+    to = input("To: ").toUpperCase();
+    if (currencies.get(to) === undefined) {
+        console.log("Unknown currency");
+        continue;
+    }
+
+    amount = Number(input("Amount: "));
+    if (isNaN(amount)) {
+        console.log("The amount has to be a number");
+        continue;
+    }
+
+    if (amount < 1) {
+        console.log("The amount cannot be less than 1");
+        continue;
+    }
+
+    result = convertFromUSD(convertToUSD(amount, from), to).toFixed(4);
+    console.log(`Result: ${amount} ${from} equals ${result} ${to}`);
+} while (true);
+
+console.log("Have a nice day!");
